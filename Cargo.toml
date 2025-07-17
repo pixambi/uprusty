@@ -10,3 +10,9 @@ license = "MIT"
 serde = "1.0.219"
 tokio = { version = "1.46.1", features = ["full"] }
 reqwest = { version = "0.12", features = ["json"] }
+
+[[example]]
+name = "basic_usage"
+path = "examples/basic_usage.rs"
+
+
