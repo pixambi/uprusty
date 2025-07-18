@@ -1,6 +1,7 @@
 use uprusty::*;
 
-fn main() {
-    let test = test("test");
-    println!("{:#?}", test);
+
+#[tokio::main]
+async fn main() {
+    test_reqwest().await;
 }
