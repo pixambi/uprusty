@@ -11,8 +11,8 @@ async fn main() {
         Ok(client) => {
             println!("Client created successfully!");
             match client.ping().await {
-                Ok(user_info) => {
-                    println!("Successfully pinged {:?}", user_info);
+                Ok(ping_response) => {
+                    println!("Successfully pinged {:?}", ping_response);
                 }
                 Err(e) => {
                     eprintln!("Failed to ping: {:?}", e);
