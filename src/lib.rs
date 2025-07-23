@@ -1,15 +1,10 @@
-
 pub use crate::client::Client;
-
 
 mod client;
 
 use serde::Deserialize;
 
-
-
-
-pub fn test(name: &str) -> String{
+pub fn test(name: &str) -> String {
     format!("Hello, {}!", name)
 }
 
@@ -27,7 +22,7 @@ pub async fn test_reqwest() {
 
     let posts: Vec<Post> = resp.json().await.unwrap();
     for post in posts {
-        println!("{:?} {:?}", post.id , post.title);
+        println!("{:?} {:?}", post.id, post.title);
     }
 }
 
@@ -36,7 +31,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_test(){
+    fn test_test() {
         let result = test("test");
         assert_eq!(result, "Hello, test!");
     }
