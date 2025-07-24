@@ -1,38 +1,18 @@
-pub use crate::client::Client;
 
 mod client;
+mod types;
+mod endpoints;
+mod models;
 
-use serde::Deserialize;
+pub use client::Client;
+pub use error::{Error, Result};
 
-pub fn test(name: &str) -> String {
-    format!("Hello, {}!", name)
-}
+pub use endpoints::{
+    AccountsExt,
+};
 
-#[derive(Deserialize)]
-struct Post {
-    userId: i32,
-    id: i32,
-    title: String,
-    body: String,
-}
-
-pub async fn test_reqwest() {
-    let post_url = "https://jsonplaceholder.typicode.com/posts";
-    let resp = reqwest::get(post_url).await.unwrap();
-
-    let posts: Vec<Post> = resp.json().await.unwrap();
-    for post in posts {
-        println!("{:?} {:?}", post.id, post.title);
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_test() {
-        let result = test("test");
-        assert_eq!(result, "Hello, test!");
-    }
+pub mod prelude {
+    pub use crate::client::Client;
+    pub use crate::endpoints::*;
+    pub use crate::types::{MoneyObject};
 }
