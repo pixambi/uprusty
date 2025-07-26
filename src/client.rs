@@ -1,12 +1,12 @@
-use reqwest::Client as HttpClient;
 use reqwest::header::{AUTHORIZATION, HeaderMap, HeaderValue};
+use reqwest::{Client as HttpClient, Method, RequestBuilder};
 use url::ParseError;
 
 #[derive(Clone, Debug)]
 pub struct Client {
-    http: HttpClient,
-    base_url: url::Url,
-    token: String,
+    pub(crate) http: HttpClient,
+    pub(crate) base_url: url::Url,
+    pub(crate) token: String,
 }
 
 #[derive(Debug)]
@@ -41,14 +41,6 @@ impl Client {
         })
     }
 
-    fn auth_headers(&self) -> Result<HeaderMap, ClientError> {
-        let mut headers = HeaderMap::new();
-        let auth_value = HeaderValue::from_str(&format!("Bearer {}", self.token))
-            .map_err(|_| ClientError::InvalidToken)?;
-        headers.insert(AUTHORIZATION, auth_value);
-        Ok(headers)
-    }
-
     //Utility function to verify auth is ok [https://developer.up.com.au/#get_util_ping]
     pub async fn ping(&self) -> Result<serde_json::Value, ClientError> {
         let url = self.base_url.join("util/ping")?;
@@ -58,5 +50,19 @@ impl Client {
 
         let json = response.json::<serde_json::Value>().await?;
         Ok(json)
+    }
+
+    //Request builder with authentication
+    pub(crate) fn request(&self, method: Method, url: url::Url) -> Result<RequestBuilder, ClientError> {
+        let headers = self.auth_headers()?;
+        Ok(self.http.request(method, url).headers(headers))
+    }
+
+    fn auth_headers(&self) -> Result<HeaderMap, ClientError> {
+        let mut headers = HeaderMap::new();
+        let auth_value = HeaderValue::from_str(&format!("Bearer {}", self.token))
+            .map_err(|_| ClientError::InvalidToken)?;
+        headers.insert(AUTHORIZATION, auth_value);
+        Ok(headers)
     }
 }
