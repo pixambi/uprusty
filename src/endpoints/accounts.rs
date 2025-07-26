@@ -56,9 +56,10 @@ impl AccountsExt for Client {
             let accounts = response.json::<AccountsResponse>().await?;
             Ok(accounts)
         } else {
-            Err(ClientError::RequestError(
-                response.error_for_status().unwrap_err(),
-            ))
+            match response.error_for_status() {
+                Err(err) => Err(ClientError::RequestError(err)),
+                Ok(_) => unreachable!("Expected an error due to non-success status code"),
+            }
         }
     }
     async fn get_account(&self, id: &str) -> Result<AccountResponse, ClientError> {
