@@ -1,3 +1,3 @@
 pub mod money;
-mod responses;
+pub mod responses;
 mod traits;
