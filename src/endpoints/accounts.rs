@@ -38,7 +38,7 @@ impl AccountsExt for Client {
                     AccountType::Transactional => "TRANSACTIONAL",
                     AccountType::HomeLoan => "HOME_LOAN",
                 };
-                query.append_pair("filter[accountType", filter_value);
+                query.append_pair("filter[accountType]", filter_value);
             }
 
             if let Some(ownership_type) = ownership_type {
@@ -46,11 +46,11 @@ impl AccountsExt for Client {
                     OwnershipType::Individual => "INDIVIDUAL",
                     OwnershipType::Joint => "JOINT",
                 };
-                query.append_pair("filter[ownershipType", filter_value);
+                query.append_pair("filter[ownershipType]", filter_value);
             }
         }
 
-        let response = self.request(Method::GET, url).send().await?;
+        let response = self.request(Method::GET, url)?.send().await?;
 
         if response.status().is_success() {
             let accounts = response.json::<AccountsResponse>().await?;
@@ -64,7 +64,7 @@ impl AccountsExt for Client {
     async fn get_account(&self, id: &str) -> Result<AccountResponse, ClientError> {
         let url = self.base_url.join(&format!("accounts/{}", id))?;
 
-        let response = self.request(Method::GET, url).send().await?;
+        let response = self.request(Method::GET, url)?.send().await?;
 
         if response.status().is_success() {
             let account = response.json::<AccountResponse>().await?;

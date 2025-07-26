@@ -53,10 +53,9 @@ impl Client {
     }
 
     //Request builder with authentication
-    pub(crate) fn request(&self, method: Method, url: url::Url) -> RequestBuilder {
-        self.http
-            .request(method, url)
-            .headers(self.auth_headers().unwrap())
+    pub(crate) fn request(&self, method: Method, url: url::Url) -> Result<RequestBuilder, ClientError> {
+        let headers = self.auth_headers()?;
+        Ok(self.http.request(method, url).headers(headers))
     }
 
     fn auth_headers(&self) -> Result<HeaderMap, ClientError> {

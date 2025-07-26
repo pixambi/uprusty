@@ -10,7 +10,7 @@ pub struct ErrorObject {
     pub status: String,
     pub title: String,
     pub detail: String,
-    pub source: Option<String>,
+    pub source: Option<ErrorSource>,
 }
 
 #[derive(Debug, Clone, Deserialize)]
