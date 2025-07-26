@@ -17,7 +17,7 @@ async-trait = "0.1.88"
 
 
 [[example]]
-name = "basic_usage"
-path = "examples/basic_usage.rs"
+name = "accounts_usage"
+path = "examples/accounts_usage.rs"
 
 

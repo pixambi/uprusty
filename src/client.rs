@@ -1,12 +1,12 @@
-use reqwest::{Client as HttpClient, Method, RequestBuilder};
 use reqwest::header::{AUTHORIZATION, HeaderMap, HeaderValue};
+use reqwest::{Client as HttpClient, Method, RequestBuilder};
 use url::ParseError;
 
 #[derive(Clone, Debug)]
 pub struct Client {
-    pub(crate)http: HttpClient,
-    pub(crate)base_url: url::Url,
-    pub(crate)token: String,
+    pub(crate) http: HttpClient,
+    pub(crate) base_url: url::Url,
+    pub(crate) token: String,
 }
 
 #[derive(Debug)]
@@ -53,8 +53,10 @@ impl Client {
     }
 
     //Request builder with authentication
-    pub(crate) fn request(&self, method: Method, url: url::Url) -> RequestBuilder{
-        self.http.request(method, url).headers(self.auth_headers().unwrap())
+    pub(crate) fn request(&self, method: Method, url: url::Url) -> RequestBuilder {
+        self.http
+            .request(method, url)
+            .headers(self.auth_headers().unwrap())
     }
 
     fn auth_headers(&self) -> Result<HeaderMap, ClientError> {

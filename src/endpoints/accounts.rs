@@ -1,18 +1,28 @@
 use crate::client::{Client, ClientError};
-use crate::models::account::{AccountsResponse, AccountResponse, AccountType, OwnershipType};
+use crate::models::account::{AccountResponse, AccountType, AccountsResponse, OwnershipType};
 use async_trait::async_trait;
 use reqwest::{Method, StatusCode};
 
 #[async_trait]
-pub trait AccountsExt{
-    async fn list_accounts(&self, page_size: Option<u32>, account_type: Option<AccountType>, ownership_type: Option<OwnershipType>) -> Result<AccountsResponse, ClientError>;
+pub trait AccountsExt {
+    async fn list_accounts(
+        &self,
+        page_size: Option<u32>,
+        account_type: Option<AccountType>,
+        ownership_type: Option<OwnershipType>,
+    ) -> Result<AccountsResponse, ClientError>;
 
     async fn get_account(&self, id: &str) -> Result<AccountResponse, ClientError>;
 }
 
 #[async_trait]
-impl AccountsExt for Client{
-    async fn list_accounts(&self, page_size: Option<u32>, account_type: Option<AccountType>, ownership_type: Option<OwnershipType>) -> Result<AccountsResponse, ClientError> {
+impl AccountsExt for Client {
+    async fn list_accounts(
+        &self,
+        page_size: Option<u32>,
+        account_type: Option<AccountType>,
+        ownership_type: Option<OwnershipType>,
+    ) -> Result<AccountsResponse, ClientError> {
         let mut url = self.base_url.join("accounts")?;
 
         {
@@ -42,26 +52,27 @@ impl AccountsExt for Client{
 
         let response = self.request(Method::GET, url).send().await?;
 
-        if response.status().is_success(){
+        if response.status().is_success() {
             let accounts = response.json::<AccountsResponse>().await?;
             Ok(accounts)
         } else {
             Err(ClientError::RequestError(
-                response.error_for_status().unwrap_err()
+                response.error_for_status().unwrap_err(),
             ))
         }
     }
     async fn get_account(&self, id: &str) -> Result<AccountResponse, ClientError> {
         let url = self.base_url.join(&format!("accounts/{}", id))?;
 
-        let  response = self.request(Method::GET, url).send().await?;
+        let response = self.request(Method::GET, url).send().await?;
 
         if response.status().is_success() {
             let account = response.json::<AccountResponse>().await?;
             Ok(account)
         } else {
-            Err(ClientError::RequestError(response.error_for_status().unwrap_err()))
+            Err(ClientError::RequestError(
+                response.error_for_status().unwrap_err(),
+            ))
         }
     }
-
 }

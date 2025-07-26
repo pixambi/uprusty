@@ -1,3 +1,3 @@
-mod traits;
+pub mod money;
 mod responses;
-pub(crate) mod money;
+mod traits;

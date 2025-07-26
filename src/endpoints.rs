@@ -1,1 +1,1 @@
-pub(crate) mod accounts;
+pub mod accounts;
