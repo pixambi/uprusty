@@ -47,6 +47,5 @@ pub mod prelude {
     pub use crate::endpoints::categories::CategoriesExt;
     pub use crate::endpoints::tags::TagsExt;
     pub use crate::endpoints::transactions::{TransactionsExt, TransactionFilters};
-    pub use crate::models::transaction::*;
     pub use crate::types::money::MoneyObject;
 }
