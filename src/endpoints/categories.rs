@@ -5,10 +5,9 @@ use reqwest::Method;
 
 #[async_trait]
 pub trait CategoriesExt {
-
     async fn list_categories(&self, parent_filter: Option<&str>) -> Result<CategoriesResponse, ClientError>;
-
     async fn get_category(&self, id: &str) -> Result<CategoryResponse, ClientError>;
+
 
     async fn categorize_transaction(
         &self,
@@ -41,7 +40,6 @@ impl CategoriesExt for Client {
         let category = response.json::<CategoryResponse>().await?;
         Ok(category)
     }
-
     async fn categorize_transaction(
         &self,
         transaction_id: &str,
@@ -63,12 +61,13 @@ impl CategoriesExt for Client {
             .await?;
 
         // Expect 204 No Content on success
-        if response.status().as_u16() == 204 {
-            Ok(())
-        } else {
-            Err(ClientError::RequestError(
-                reqwest::Error::from(response.error_for_status().unwrap_err())
-            ))
+        match response.status() {
+            reqwest::StatusCode::NO_CONTENT => Ok(()),
+            _ => {
+                response.error_for_status()
+                    .map(|_| ()) // Convert success response to ()
+                    .map_err(ClientError::RequestError)
+            }
         }
     }
 }
