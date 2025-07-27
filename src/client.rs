@@ -58,6 +58,18 @@ impl Client {
         Ok(self.http.request(method, url).headers(headers))
     }
 
+    /// Helper method to handle responses that should return 204 No Content
+    pub(crate) async fn handle_no_content_response(&self, response: reqwest::Response) -> Result<(), ClientError> {
+        match response.status() {
+            reqwest::StatusCode::NO_CONTENT => Ok(()),
+            _ => {
+                response.error_for_status()
+                    .map(|_| ()) // Convert success response to ()
+                    .map_err(ClientError::RequestError)
+            }
+        }
+    }
+
     fn auth_headers(&self) -> Result<HeaderMap, ClientError> {
         let mut headers = HeaderMap::new();
         let auth_value = HeaderValue::from_str(&format!("Bearer {}", self.token))

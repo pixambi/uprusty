@@ -60,14 +60,6 @@ impl CategoriesExt for Client {
             .send()
             .await?;
 
-        // Expect 204 No Content on success
-        match response.status() {
-            reqwest::StatusCode::NO_CONTENT => Ok(()),
-            _ => {
-                response.error_for_status()
-                    .map(|_| ()) // Convert success response to ()
-                    .map_err(ClientError::RequestError)
-            }
-        }
+        self.handle_no_content_response(response).await
     }
 }

@@ -35,6 +35,7 @@ pub struct PaginationLinks {
     pub next: Option<String>,
 }
 
+// For POST/DELETE requests to add/remove tags from transactions
 #[derive(Debug, Clone, Serialize)]
 pub struct TagInputResourceIdentifier {
     #[serde(rename = "type")]

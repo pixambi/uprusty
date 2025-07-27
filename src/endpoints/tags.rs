@@ -8,7 +8,6 @@ pub trait TagsExt {
 
     async fn list_tags(&self, page_size: Option<u32>) -> Result<TagsResponse, ClientError>;
 
-
     async fn add_tags_to_transaction(
         &self,
         transaction_id: &str,
@@ -55,15 +54,7 @@ impl TagsExt for Client {
             .send()
             .await?;
 
-        // Expect 204 No Content on success
-        match response.status() {
-            reqwest::StatusCode::NO_CONTENT => Ok(()),
-            _ => {
-                response.error_for_status()
-                    .map(|_| ()) // Convert success response to ()
-                    .map_err(ClientError::RequestError)
-            }
-        }
+        self.handle_no_content_response(response).await
     }
 
     async fn remove_tags_from_transaction(
@@ -83,13 +74,6 @@ impl TagsExt for Client {
             .send()
             .await?;
 
-        match response.status() {
-            reqwest::StatusCode::NO_CONTENT => Ok(()),
-            _ => {
-                response.error_for_status()
-                    .map(|_| ())
-                    .map_err(ClientError::RequestError)
-            }
-        }
+        self.handle_no_content_response(response).await
     }
 }
