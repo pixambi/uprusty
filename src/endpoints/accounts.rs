@@ -1,7 +1,7 @@
 use crate::client::{Client, ClientError};
 use crate::models::account::{AccountResponse, AccountType, AccountsResponse, OwnershipType};
 use async_trait::async_trait;
-use reqwest::{Method, StatusCode};
+use reqwest::Method;
 
 #[async_trait]
 pub trait AccountsExt {
@@ -51,29 +51,17 @@ impl AccountsExt for Client {
         }
 
         let response = self.request(Method::GET, url)?.send().await?;
-
-        if response.status().is_success() {
-            let accounts = response.json::<AccountsResponse>().await?;
-            Ok(accounts)
-        } else {
-            match response.error_for_status() {
-                Err(err) => Err(ClientError::RequestError(err)),
-                Ok(_) => unreachable!("Expected an error due to non-success status code"),
-            }
-        }
+        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let accounts = response.json::<AccountsResponse>().await?;
+        Ok(accounts)
     }
+
     async fn get_account(&self, id: &str) -> Result<AccountResponse, ClientError> {
         let url = self.base_url.join(&format!("accounts/{}", id))?;
 
         let response = self.request(Method::GET, url)?.send().await?;
-
-        if response.status().is_success() {
-            let account = response.json::<AccountResponse>().await?;
-            Ok(account)
-        } else {
-            Err(ClientError::RequestError(
-                response.error_for_status().unwrap_err(),
-            ))
-        }
+        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let account = response.json::<AccountResponse>().await?;
+        Ok(account)
     }
 }

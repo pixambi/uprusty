@@ -24,30 +24,17 @@ impl AttachmentsExt for Client {
         }
 
         let response = self.request(Method::GET, url)?.send().await?;
-
-        if response.status().is_success() {
-            let attachments = response.json::<AttachmentsResponse>().await?;
-            Ok(attachments)
-        } else {
-            match response.error_for_status() {
-                Err(err) => Err(ClientError::RequestError(err)),
-                Ok(_) => unreachable!("Expected an error due to non-success status code"),
-            }
-        }
+        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let attachments = response.json::<AttachmentsResponse>().await?;
+        Ok(attachments)
     }
 
     async fn get_attachment(&self, id: &str) -> Result<AttachmentResponse, ClientError> {
         let url = self.base_url.join(&format!("attachments/{}", id))?;
 
         let response = self.request(Method::GET, url)?.send().await?;
-
-        if response.status().is_success() {
-            let attachment = response.json::<AttachmentResponse>().await?;
-            Ok(attachment)
-        } else {
-            Err(ClientError::RequestError(
-                response.error_for_status().unwrap_err(),
-            ))
-        }
+        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let attachment = response.json::<AttachmentResponse>().await?;
+        Ok(attachment)
     }
 }
