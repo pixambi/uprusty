@@ -23,3 +23,7 @@ path = "examples/accounts_usage.rs"
 [[example]]
 name = "attachments_usage"
 path = "examples/attachments_usage.rs"
+
+[[example]]
+name = "categories_usage"
+path = "examples/categories_usage.rs"

@@ -1,4 +1,5 @@
 use dotenv::dotenv;
+use uprusty::AccountType;
 use uprusty::prelude::*;
 
 #[tokio::main]
