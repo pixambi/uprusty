@@ -1,14 +1,16 @@
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
 pub struct AttachmentAttributes {
+    #[serde(rename = "createdAt")]
     pub created_at: Option<String>,
     #[serde(rename = "fileURL")]
     pub file_url: Option<String>,
     #[serde(rename = "fileURLExpiresAt")]
     pub file_url_expires_at: String,
+    #[serde(rename = "fileExtension")]
     pub file_extension: Option<String>,
+    #[serde(rename = "fileContentType")]
     pub file_content_type: Option<String>,
 }
 
