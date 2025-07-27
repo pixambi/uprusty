@@ -20,4 +20,6 @@ async-trait = "0.1.88"
 name = "accounts_usage"
 path = "examples/accounts_usage.rs"
 
-
+[[example]]
+name = "attachments_usage"
+path = "examples/attachments_usage.rs"
