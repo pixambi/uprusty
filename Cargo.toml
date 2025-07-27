@@ -1,7 +1,7 @@
 [package]
 name = "uprusty"
 version = "0.1.0"
-edition = "2024"
+edition = "2021"
 authors = ["pixam github@pixelizedambitions.com"]
 license = "MIT"
 
@@ -27,3 +27,7 @@ path = "examples/attachments_usage.rs"
 [[example]]
 name = "categories_usage"
 path = "examples/categories_usage.rs"
+
+[[example]]
+name = "tags_usage"
+path = "examples/tags_usage.rs"
