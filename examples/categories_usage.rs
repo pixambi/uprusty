@@ -1,4 +1,5 @@
 use dotenv::dotenv;
+use uprusty::CategoryResource;
 use uprusty::prelude::*;
 
 #[tokio::main]

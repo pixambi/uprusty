@@ -11,6 +11,7 @@ pub use endpoints::accounts::AccountsExt;
 pub use endpoints::attachments::AttachmentsExt;
 pub use endpoints::categories::CategoriesExt;
 pub use endpoints::tags::TagsExt;
+pub use endpoints::transactions::{TransactionsExt, TransactionFilters};
 
 pub use models::account::{
     AccountAttributes, AccountResource, AccountResponse, AccountType, AccountsResponse,
@@ -31,6 +32,12 @@ pub use models::tags::{
     TagResource, TagsResponse, TagRelationships, TagsTransactionRequest,
 };
 
+pub use models::transaction::{
+    TransactionResource, TransactionResponse, TransactionsResponse, TransactionStatus,
+    TransactionAttributes, TransactionRelationships, CardPurchaseMethod,
+    HoldInfo, RoundUp, Cashback, Note, Customer,
+};
+
 pub use types::money::MoneyObject;
 
 pub mod prelude {
@@ -39,8 +46,6 @@ pub mod prelude {
     pub use crate::endpoints::attachments::AttachmentsExt;
     pub use crate::endpoints::categories::CategoriesExt;
     pub use crate::endpoints::tags::TagsExt;
-    pub use crate::models::attachment::*;
-    pub use crate::models::category::*;
-    pub use crate::models::tags::*;
+    pub use crate::endpoints::transactions::{TransactionsExt, TransactionFilters};
     pub use crate::types::money::MoneyObject;
 }
