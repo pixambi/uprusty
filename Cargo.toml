@@ -31,3 +31,7 @@ path = "examples/categories_usage.rs"
 [[example]]
 name = "tags_usage"
 path = "examples/tags_usage.rs"
+
+[[example]]
+name = "transactions_usage"
+path = "examples/transactions_usage.rs"
