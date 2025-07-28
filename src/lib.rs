@@ -3,6 +3,7 @@ mod endpoints;
 mod error;
 mod models;
 mod types;
+mod webhook;
 
 pub use client::Client;
 pub use error::{Error, Result};
