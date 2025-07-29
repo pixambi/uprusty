@@ -3,7 +3,7 @@ mod endpoints;
 mod error;
 mod models;
 mod types;
-mod webhook;
+pub mod webhook;
 
 pub use client::Client;
 pub use error::{Error, Result};
@@ -13,6 +13,7 @@ pub use endpoints::attachments::AttachmentsExt;
 pub use endpoints::categories::CategoriesExt;
 pub use endpoints::tags::TagsExt;
 pub use endpoints::transactions::{TransactionsExt, TransactionFilters};
+pub use endpoints::webhooks::WebhooksExt;
 
 pub use models::account::{
     AccountAttributes, AccountResource, AccountResponse, AccountType, AccountsResponse,
@@ -39,6 +40,12 @@ pub use models::transaction::{
     HoldInfo, RoundUp, Cashback, Note, Customer,
 };
 
+pub use models::webhooks::{
+    WebhookResource, WebhookResponse, WebhooksResponse, WebhookEventResource,
+    WebhookEventResponse, WebhookEventType, WebhookDeliveryLogResource,
+    WebhookDeliveryLogsResponse, WebhookDeliveryStatus, CreateWebhookRequest,
+};
+
 pub use types::money::MoneyObject;
 
 pub mod prelude {
@@ -48,5 +55,7 @@ pub mod prelude {
     pub use crate::endpoints::categories::CategoriesExt;
     pub use crate::endpoints::tags::TagsExt;
     pub use crate::endpoints::transactions::{TransactionsExt, TransactionFilters};
+    pub use crate::endpoints::webhooks::WebhooksExt;
+    pub use crate::webhook::{WebhookHandler, WebhookEventHandler};
     pub use crate::types::money::MoneyObject;
 }

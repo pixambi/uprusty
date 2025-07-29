@@ -3,4 +3,4 @@ pub mod attachments;
 pub mod categories;
 pub mod tags;
 pub mod transactions;
-mod webhooks;
+pub(crate) mod webhooks;
