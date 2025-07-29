@@ -7,7 +7,10 @@ use reqwest::Method;
 pub trait AttachmentsExt {
     /// Retrieve a list of all attachments. The returned list is paginated and can be scrolled
     /// by following the next and prev links where present.
-    async fn list_attachments(&self, page_size: Option<u32>) -> Result<AttachmentsResponse, ClientError>;
+    async fn list_attachments(
+        &self,
+        page_size: Option<u32>,
+    ) -> Result<AttachmentsResponse, ClientError>;
 
     /// Retrieve a specific attachment by providing its unique identifier.
     async fn get_attachment(&self, id: &str) -> Result<AttachmentResponse, ClientError>;
@@ -15,7 +18,10 @@ pub trait AttachmentsExt {
 
 #[async_trait]
 impl AttachmentsExt for Client {
-    async fn list_attachments(&self, page_size: Option<u32>) -> Result<AttachmentsResponse, ClientError> {
+    async fn list_attachments(
+        &self,
+        page_size: Option<u32>,
+    ) -> Result<AttachmentsResponse, ClientError> {
         let mut url = self.base_url.join("attachments")?;
 
         if let Some(size) = page_size {
@@ -24,7 +30,9 @@ impl AttachmentsExt for Client {
         }
 
         let response = self.request(Method::GET, url)?.send().await?;
-        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let response = response
+            .error_for_status()
+            .map_err(ClientError::RequestError)?;
         let attachments = response.json::<AttachmentsResponse>().await?;
         Ok(attachments)
     }
@@ -33,7 +41,9 @@ impl AttachmentsExt for Client {
         let url = self.base_url.join(&format!("attachments/{}", id))?;
 
         let response = self.request(Method::GET, url)?.send().await?;
-        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let response = response
+            .error_for_status()
+            .map_err(ClientError::RequestError)?;
         let attachment = response.json::<AttachmentResponse>().await?;
         Ok(attachment)
     }

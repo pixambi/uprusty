@@ -53,17 +53,25 @@ impl Client {
     }
 
     //Request builder with authentication
-    pub(crate) fn request(&self, method: Method, url: url::Url) -> Result<RequestBuilder, ClientError> {
+    pub(crate) fn request(
+        &self,
+        method: Method,
+        url: url::Url,
+    ) -> Result<RequestBuilder, ClientError> {
         let headers = self.auth_headers()?;
         Ok(self.http.request(method, url).headers(headers))
     }
 
     /// Helper method to handle responses that should return 204 No Content
-    pub(crate) async fn handle_no_content_response(&self, response: reqwest::Response) -> Result<(), ClientError> {
+    pub(crate) async fn handle_no_content_response(
+        &self,
+        response: reqwest::Response,
+    ) -> Result<(), ClientError> {
         match response.status() {
             reqwest::StatusCode::NO_CONTENT => Ok(()),
             _ => {
-                response.error_for_status()
+                response
+                    .error_for_status()
                     .map(|_| ()) // Convert success response to ()
                     .map_err(ClientError::RequestError)
             }

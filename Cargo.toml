@@ -14,7 +14,9 @@ serde_json = "1.0.140"
 url = "2.5.4"
 dotenv = "0.15"
 async-trait = "0.1.88"
-
+hmac = "0.12"
+sha2 = "0.10"
+hex = "0.4"
 
 [[example]]
 name = "accounts_usage"
@@ -35,3 +37,7 @@ path = "examples/tags_usage.rs"
 [[example]]
 name = "transactions_usage"
 path = "examples/transactions_usage.rs"
+
+[[example]]
+name = "webhooks_usage"
+path = "examples/webhooks_usage.rs"

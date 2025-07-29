@@ -51,7 +51,9 @@ impl AccountsExt for Client {
         }
 
         let response = self.request(Method::GET, url)?.send().await?;
-        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let response = response
+            .error_for_status()
+            .map_err(ClientError::RequestError)?;
         let accounts = response.json::<AccountsResponse>().await?;
         Ok(accounts)
     }
@@ -60,7 +62,9 @@ impl AccountsExt for Client {
         let url = self.base_url.join(&format!("accounts/{}", id))?;
 
         let response = self.request(Method::GET, url)?.send().await?;
-        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let response = response
+            .error_for_status()
+            .map_err(ClientError::RequestError)?;
         let account = response.json::<AccountResponse>().await?;
         Ok(account)
     }
