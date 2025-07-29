@@ -4,6 +4,19 @@ version = "0.1.0"
 edition = "2024"
 authors = ["pixam github@pixelizedambitions.com"]
 license = "MIT"
+description = "Unofficial Rust client library for the Up Banking API"
+repository = "https://github.com/pixambi/uprusty"
+homepage = "https://github.com/pixambi/uprusty"
+documentation = "https://docs.rs/uprusty"
+readme = "README.md"
+keywords = ["banking", "api", "up", "finance", "australia"]
+categories = ["api-bindings", "web-programming::http-client"]
+exclude = [
+    ".env",
+    "examples/",
+    ".gitignore",
+    ".idea/"
+]
 
 
 [dependencies]
@@ -17,6 +30,9 @@ async-trait = "0.1.88"
 hmac = "0.12"
 sha2 = "0.10"
 hex = "0.4"
+
+[dev-dependencies]
+dotenv = "0.15"
 
 [[example]]
 name = "accounts_usage"
