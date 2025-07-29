@@ -1,0 +1,43 @@
+[package]
+name = "uprusty"
+version = "0.1.0"
+edition = "2024"
+authors = ["pixam github@pixelizedambitions.com"]
+license = "MIT"
+
+
+[dependencies]
+serde = { version = "1.0.219", features = ["derive"] }
+tokio = { version = "1.46.1", features = ["full"] }
+reqwest = { version = "0.12", features = ["json", "blocking"] }
+serde_json = "1.0.140"
+url = "2.5.4"
+dotenv = "0.15"
+async-trait = "0.1.88"
+hmac = "0.12"
+sha2 = "0.10"
+hex = "0.4"
+
+[[example]]
+name = "accounts_usage"
+path = "examples/accounts_usage.rs"
+
+[[example]]
+name = "attachments_usage"
+path = "examples/attachments_usage.rs"
+
+[[example]]
+name = "categories_usage"
+path = "examples/categories_usage.rs"
+
+[[example]]
+name = "tags_usage"
+path = "examples/tags_usage.rs"
+
+[[example]]
+name = "transactions_usage"
+path = "examples/transactions_usage.rs"
+
+[[example]]
+name = "webhooks_usage"
+path = "examples/webhooks_usage.rs"
