@@ -89,7 +89,7 @@ impl CreateWebhookRequest {
 }
 
 // Webhook events
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "SCREAMING_SNAKE_CASE")]
 pub enum WebhookEventType {
     TransactionCreated,

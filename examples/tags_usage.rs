@@ -16,7 +16,9 @@ async fn main() {
                 Ok(tags) => {
                     println!("\n=== All Tags ===");
                     if tags.data.is_empty() {
-                        println!("No tags found. Tags are created when you add them to transactions.");
+                        println!(
+                            "No tags found. Tags are created when you add them to transactions."
+                        );
                     } else {
                         for tag in &tags.data {
                             println!("Tag: \"{}\"", tag.id);
@@ -76,7 +78,7 @@ async fn main() {
                             "Gift",
                             "Emergency",
                             "Monthly Bill",
-                            "Entertainment"
+                            "Entertainment",
                         ];
 
                         println!("Some tag ideas based on common usage:");

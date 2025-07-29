@@ -146,7 +146,9 @@ async fn main() {
             println!();
             println!("// 3. Manual verification");
             println!("use uprusty::webhook::verify_signature;");
-            println!("let is_valid = verify_signature(secret_key, signature_header, raw_body.as_bytes())?;");
+            println!(
+                "let is_valid = verify_signature(secret_key, signature_header, raw_body.as_bytes())?;"
+            );
             println!("```");
 
             // Example 2: Webhook handler usage

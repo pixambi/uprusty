@@ -5,7 +5,6 @@ use reqwest::Method;
 
 #[async_trait]
 pub trait TagsExt {
-
     async fn list_tags(&self, page_size: Option<u32>) -> Result<TagsResponse, ClientError>;
 
     async fn add_tags_to_transaction(
@@ -32,7 +31,9 @@ impl TagsExt for Client {
         }
 
         let response = self.request(Method::GET, url)?.send().await?;
-        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let response = response
+            .error_for_status()
+            .map_err(ClientError::RequestError)?;
         let tags = response.json::<TagsResponse>().await?;
         Ok(tags)
     }
@@ -49,10 +50,7 @@ impl TagsExt for Client {
 
         let body = TagsTransactionRequest::new(tag_ids);
 
-        let response = self.request(Method::POST, url)?
-            .json(&body)
-            .send()
-            .await?;
+        let response = self.request(Method::POST, url)?.json(&body).send().await?;
 
         self.handle_no_content_response(response).await
     }
@@ -69,7 +67,8 @@ impl TagsExt for Client {
 
         let body = TagsTransactionRequest::new(tag_ids);
 
-        let response = self.request(Method::DELETE, url)?
+        let response = self
+            .request(Method::DELETE, url)?
             .json(&body)
             .send()
             .await?;

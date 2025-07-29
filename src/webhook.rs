@@ -1,10 +1,8 @@
 use crate::models::webhooks::{WebhookEventResource, WebhookEventType};
-use serde::de::DeserializeOwned;
 use std::error::Error;
 use std::fmt;
 
 pub mod verification {
-    use sha2::digest::KeyInit;
     use super::*;
 
     #[derive(Debug)]
@@ -19,12 +17,15 @@ pub mod verification {
         fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
             match self {
                 VerificationError::InvalidSignature => write!(f, "Invalid signature format"),
-                VerificationError::MissingSignature => write!(f, "Missing X-Up-Authenticity-Signature header"),
+                VerificationError::MissingSignature => {
+                    write!(f, "Missing X-Up-Authenticity-Signature header")
+                }
                 VerificationError::InvalidHex => write!(f, "Invalid hexadecimal in signature"),
                 VerificationError::SignatureMismatch => write!(f, "Signature verification failed"),
             }
         }
     }
+
     impl Error for VerificationError {}
 
     pub fn verify_signature(
@@ -32,20 +33,24 @@ pub mod verification {
         signature_header: &str,
         raw_body: &[u8],
     ) -> Result<bool, VerificationError> {
-        use sha2::{Digest, Sha256};
         use hmac::{Hmac, Mac};
+        use sha2::Sha256;
 
-        let received_signature = hex::decode(signature_header)
-            .map_err(|_| VerificationError::InvalidHex)?;
+        let received_signature =
+            hex::decode(signature_header).map_err(|_| VerificationError::InvalidHex)?;
 
-        let mut mac = Hmac::<Sha256>::new_from_slice(secret_key.as_bytes())
+        type HmacSha256 = Hmac<Sha256>;
+        let mut mac = HmacSha256::new_from_slice(secret_key.as_bytes())
             .map_err(|_| VerificationError::InvalidSignature)?;
 
         mac.update(raw_body);
 
         let computed_signature = mac.finalize().into_bytes();
 
-        Ok(constant_time_eq(&computed_signature[..], &received_signature))
+        Ok(constant_time_eq(
+            &computed_signature[..],
+            &received_signature,
+        ))
     }
 
     fn constant_time_eq(a: &[u8], b: &[u8]) -> bool {
@@ -59,6 +64,7 @@ pub mod verification {
         }
         result == 0
     }
+
     pub fn extract_signature_from_headers<I, K, V>(headers: I) -> Result<String, VerificationError>
     where
         I: IntoIterator<Item = (K, V)>,
@@ -75,8 +81,8 @@ pub mod verification {
 }
 
 pub mod events {
-    use std::cmp::PartialEq;
     use super::*;
+
     pub fn parse_and_verify_event(
         secret_key: &str,
         signature_header: &str,
@@ -84,20 +90,12 @@ pub mod events {
     ) -> Result<WebhookEventResource, WebhookProcessingError> {
         verification::verify_signature(secret_key, signature_header, raw_body.as_bytes())
             .map_err(WebhookProcessingError::Verification)?;
-
-        let parsed: serde_json::Value = serde_json::from_str(raw_body)
-            .map_err(WebhookProcessingError::JsonParsing)?;
-
+        let parsed: serde_json::Value =
+            serde_json::from_str(raw_body).map_err(WebhookProcessingError::JsonParsing)?;
         let event: WebhookEventResource = serde_json::from_value(parsed["data"].clone())
             .map_err(WebhookProcessingError::EventParsing)?;
 
         Ok(event)
-    }
-
-    impl PartialEq for WebhookEventType {
-        fn eq(&self, other: &Self) -> bool {
-            todo!()
-        }
     }
 
     pub fn is_event_type(event: &WebhookEventResource, event_type: WebhookEventType) -> bool {
@@ -105,11 +103,13 @@ pub mod events {
     }
 
     pub fn extract_transaction_id(event: &WebhookEventResource) -> Option<&str> {
-        event.relationships.transaction.as_ref()
+        event
+            .relationships
+            .transaction
+            .as_ref()
             .map(|t| t.data.id.as_str())
     }
 
-    /// Extract webhook ID from event
     pub fn extract_webhook_id(event: &WebhookEventResource) -> &str {
         &event.relationships.webhook.data.id
     }
@@ -221,6 +221,5 @@ pub trait WebhookEventHandler {
     }
 }
 
-// Re-export for convenience
-pub use verification::{verify_signature, VerificationError};
-pub use events::{parse_and_verify_event, WebhookProcessingError};
+pub use events::{WebhookProcessingError, parse_and_verify_event};
+pub use verification::{VerificationError, verify_signature};

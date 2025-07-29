@@ -26,8 +26,14 @@ async fn main() {
                         if let Some(content_type) = &attachment.attributes.file_content_type {
                             println!("  Content Type: {}", content_type);
                         }
-                        println!("  Related Transaction: {}", attachment.relationships.transaction.data.id);
-                        println!("  File URL Expires: {}", attachment.attributes.file_url_expires_at);
+                        println!(
+                            "  Related Transaction: {}",
+                            attachment.relationships.transaction.data.id
+                        );
+                        println!(
+                            "  File URL Expires: {}",
+                            attachment.attributes.file_url_expires_at
+                        );
                         println!();
                     }
 
@@ -41,7 +47,10 @@ async fn main() {
                                 if let Some(file_url) = &attachment.attributes.file_url {
                                     println!("File URL: {}", file_url);
                                 }
-                                println!("Related to transaction: {}", attachment.relationships.transaction.data.id);
+                                println!(
+                                    "Related to transaction: {}",
+                                    attachment.relationships.transaction.data.id
+                                );
                             }
                             Err(e) => {
                                 eprintln!("Failed to get specific attachment: {:?}", e);
@@ -57,7 +66,11 @@ async fn main() {
                                 println!(
                                     "Attachment: {} ({})",
                                     attachment.id,
-                                    attachment.attributes.file_extension.as_deref().unwrap_or("unknown")
+                                    attachment
+                                        .attributes
+                                        .file_extension
+                                        .as_deref()
+                                        .unwrap_or("unknown")
                                 );
                             }
 

@@ -86,7 +86,9 @@ impl TransactionsExt for Client {
         }
 
         let response = self.request(Method::GET, url)?.send().await?;
-        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let response = response
+            .error_for_status()
+            .map_err(ClientError::RequestError)?;
         let transactions = response.json::<TransactionsResponse>().await?;
         Ok(transactions)
     }
@@ -95,7 +97,9 @@ impl TransactionsExt for Client {
         let url = self.base_url.join(&format!("transactions/{}", id))?;
 
         let response = self.request(Method::GET, url)?.send().await?;
-        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let response = response
+            .error_for_status()
+            .map_err(ClientError::RequestError)?;
         let transaction = response.json::<TransactionResponse>().await?;
         Ok(transaction)
     }
@@ -106,7 +110,9 @@ impl TransactionsExt for Client {
         page_size: Option<u32>,
         filters: Option<TransactionFilters>,
     ) -> Result<TransactionsResponse, ClientError> {
-        let mut url = self.base_url.join(&format!("accounts/{}/transactions", account_id))?;
+        let mut url = self
+            .base_url
+            .join(&format!("accounts/{}/transactions", account_id))?;
 
         {
             let mut query = url.query_pairs_mut();
@@ -143,7 +149,9 @@ impl TransactionsExt for Client {
         }
 
         let response = self.request(Method::GET, url)?.send().await?;
-        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let response = response
+            .error_for_status()
+            .map_err(ClientError::RequestError)?;
         let transactions = response.json::<TransactionsResponse>().await?;
         Ok(transactions)
     }

@@ -46,9 +46,10 @@ async fn main() {
                     }
 
                     // Get a specific category
-                    if let Some(category) = categories.data.iter()
-                        .find(|cat| cat.relationships.children.data.is_empty() &&
-                            cat.relationships.parent.data.is_some()) {
+                    if let Some(category) = categories.data.iter().find(|cat| {
+                        cat.relationships.children.data.is_empty()
+                            && cat.relationships.parent.data.is_some()
+                    }) {
                         println!("\n=== Getting specific category: {} ===", category.id);
                         match client.get_category(&category.id).await {
                             Ok(category_response) => {
@@ -61,7 +62,10 @@ async fn main() {
                                 }
 
                                 if !cat.relationships.children.data.is_empty() {
-                                    println!("Children: {} categories", cat.relationships.children.data.len());
+                                    println!(
+                                        "Children: {} categories",
+                                        cat.relationships.children.data.len()
+                                    );
                                 }
                             }
                             Err(e) => {
@@ -73,7 +77,9 @@ async fn main() {
                     // Example of how to categorize a transaction (would need a real transaction ID)
                     println!("\n=== Transaction Categorization Example ===");
                     println!("To categorize a transaction, you would use:");
-                    println!("client.categorize_transaction(\"transaction-id\", Some(\"restaurants-and-cafes\")).await?;");
+                    println!(
+                        "client.categorize_transaction(\"transaction-id\", Some(\"restaurants-and-cafes\")).await?;"
+                    );
                     println!("\nTo remove a category:");
                     println!("client.categorize_transaction(\"transaction-id\", None).await?;");
                 }
@@ -91,7 +97,10 @@ async fn main() {
 fn print_categories(categories: &[CategoryResource], indent: usize) {
     for category in categories {
         let indent_str = "  ".repeat(indent);
-        println!("{}• {} ({})", indent_str, category.attributes.name, category.id);
+        println!(
+            "{}• {} ({})",
+            indent_str, category.attributes.name, category.id
+        );
 
         // Print parent info if available
         if let Some(parent) = &category.relationships.parent.data {
@@ -100,7 +109,11 @@ fn print_categories(categories: &[CategoryResource], indent: usize) {
 
         // Print children count if any
         if !category.relationships.children.data.is_empty() {
-            println!("{}  Children: {} categories", indent_str, category.relationships.children.data.len());
+            println!(
+                "{}  Children: {} categories",
+                indent_str,
+                category.relationships.children.data.len()
+            );
         }
     }
 }

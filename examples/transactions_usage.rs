@@ -19,8 +19,7 @@ async fn main() {
                     for transaction in &transactions.data {
                         println!(
                             "Transaction: {} - {}",
-                            transaction.attributes.description,
-                            transaction.attributes.amount.value
+                            transaction.attributes.description, transaction.attributes.amount.value
                         );
                         println!("  Status: {:?}", transaction.attributes.status);
                         println!("  Created: {}", transaction.attributes.created_at);
@@ -28,7 +27,10 @@ async fn main() {
                             println!("  Message: {}", message);
                         }
                         if !transaction.relationships.tags.data.is_empty() {
-                            let tags: Vec<&str> = transaction.relationships.tags.data
+                            let tags: Vec<&str> = transaction
+                                .relationships
+                                .tags
+                                .data
                                 .iter()
                                 .map(|tag| tag.id.as_str())
                                 .collect();
@@ -43,17 +45,22 @@ async fn main() {
                         match client.get_transaction(&first_transaction.id).await {
                             Ok(transaction_response) => {
                                 let transaction = &transaction_response.data;
-                                println!("Retrieved transaction: {}", transaction.attributes.description);
-                                println!("  Amount: {} {}",
-                                         transaction.attributes.amount.value,
-                                         transaction.attributes.amount.currency_code
+                                println!(
+                                    "Retrieved transaction: {}",
+                                    transaction.attributes.description
+                                );
+                                println!(
+                                    "  Amount: {} {}",
+                                    transaction.attributes.amount.value,
+                                    transaction.attributes.amount.currency_code
                                 );
 
                                 // Check if it's a foreign transaction
-                                if let Some(foreign_amount) = &transaction.attributes.foreign_amount {
-                                    println!("  Foreign amount: {} {}",
-                                             foreign_amount.value,
-                                             foreign_amount.currency_code
+                                if let Some(foreign_amount) = &transaction.attributes.foreign_amount
+                                {
+                                    println!(
+                                        "  Foreign amount: {} {}",
+                                        foreign_amount.value, foreign_amount.currency_code
                                     );
                                 }
 
@@ -67,9 +74,9 @@ async fn main() {
 
                                 // Check for cashback
                                 if let Some(cashback) = &transaction.attributes.cashback {
-                                    println!("  Cashback: {} - {}",
-                                             cashback.amount.value,
-                                             cashback.description
+                                    println!(
+                                        "  Cashback: {} - {}",
+                                        cashback.amount.value, cashback.description
                                     );
                                 }
                             }
@@ -109,15 +116,15 @@ async fn main() {
                     match client.list_accounts(None, None, None).await {
                         Ok(accounts) => {
                             if let Some(first_account) = accounts.data.first() {
-                                println!("\n=== Transactions for Account: {} ===",
-                                         first_account.attributes.display_name
+                                println!(
+                                    "\n=== Transactions for Account: {} ===",
+                                    first_account.attributes.display_name
                                 );
 
-                                match client.list_account_transactions(
-                                    &first_account.id,
-                                    Some(5),
-                                    None
-                                ).await {
+                                match client
+                                    .list_account_transactions(&first_account.id, Some(5), None)
+                                    .await
+                                {
                                     Ok(account_transactions) => {
                                         for transaction in &account_transactions.data {
                                             println!(

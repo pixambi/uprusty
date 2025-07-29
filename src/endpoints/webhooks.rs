@@ -40,7 +40,9 @@ impl WebhooksExt for Client {
         }
 
         let response = self.request(Method::GET, url)?.send().await?;
-        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let response = response
+            .error_for_status()
+            .map_err(ClientError::RequestError)?;
         let webhooks = response.json::<WebhooksResponse>().await?;
         Ok(webhooks)
     }
@@ -59,7 +61,9 @@ impl WebhooksExt for Client {
             .send()
             .await?;
 
-        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let response = response
+            .error_for_status()
+            .map_err(ClientError::RequestError)?;
         let webhook = response.json::<WebhookResponse>().await?;
         Ok(webhook)
     }
@@ -68,7 +72,9 @@ impl WebhooksExt for Client {
         let url = self.base_url.join(&format!("webhooks/{}", id))?;
 
         let response = self.request(Method::GET, url)?.send().await?;
-        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let response = response
+            .error_for_status()
+            .map_err(ClientError::RequestError)?;
         let webhook = response.json::<WebhookResponse>().await?;
         Ok(webhook)
     }
@@ -90,7 +96,9 @@ impl WebhooksExt for Client {
             .send()
             .await?;
 
-        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let response = response
+            .error_for_status()
+            .map_err(ClientError::RequestError)?;
         let event = response.json::<WebhookEventResponse>().await?;
         Ok(event)
     }
@@ -100,7 +108,9 @@ impl WebhooksExt for Client {
         webhook_id: &str,
         page_size: Option<u32>,
     ) -> Result<WebhookDeliveryLogsResponse, ClientError> {
-        let mut url = self.base_url.join(&format!("webhooks/{}/logs", webhook_id))?;
+        let mut url = self
+            .base_url
+            .join(&format!("webhooks/{}/logs", webhook_id))?;
 
         if let Some(size) = page_size {
             let mut query = url.query_pairs_mut();
@@ -108,7 +118,9 @@ impl WebhooksExt for Client {
         }
 
         let response = self.request(Method::GET, url)?.send().await?;
-        let response = response.error_for_status().map_err(ClientError::RequestError)?;
+        let response = response
+            .error_for_status()
+            .map_err(ClientError::RequestError)?;
         let logs = response.json::<WebhookDeliveryLogsResponse>().await?;
         Ok(logs)
     }
